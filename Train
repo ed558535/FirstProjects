@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Train
+{
+   public class Train
+     {
+        int x;
+        int y;
+        string model;
+        int wagon;
+        ConsoleColor color;
+        int speed;
+        int distance;
+
+        public string Model { get => model; set => model = value; }
+        public int Wagon { get { return wagon; } set { if (value >= 1 && value <= 5) wagon = value; } }
+        public ConsoleColor Color { get => color; set => color = value; }
+        public int Speed { get { return speed; } set { if (value > 0 && value <= 200) speed = value; } }
+        public int X { get { return x; } set { if (value < Console.WindowWidth) x = value; } }
+        public int Y { get { return y; } set { if (value > 0) y = value; } }
+        public int Distance { get { return distance; } set { if (value >= 10 && value < Console.WindowWidth) distance = value; } }
+
+        public Train(string model = "Mercedes", int wagon = 1, ConsoleColor color = ConsoleColor.White, int speed = 100, int distance = 50)
+        {
+            this.Model = Model;
+            this.Wagon = Wagon;
+            this.Color = Color;
+            this.Speed = Speed;
+            this.Distance = Distance;
+        }
+
+        public override string ToString()
+        {
+            return "Model = " + Model + " Wagon = " + Wagon + " Color = " + Color + " Speed = " + Speed + " Distance = " + Distance;
+        }
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is Train)
+            {
+                Train train = obj as Train;
+                if (GetHashCode() == train.GetHashCode())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Draw(bool isTrue = true)
+        {
+            Console.ForegroundColor = isTrue == true ? Color : Console.BackgroundColor;
+            Console.SetCursorPosition(X, Y);
+            Console.Write(new string('*', Wagon));
+        }
+        public void RunTrain()
+        {
+            for (int i = 0; i < Distance; i++)
+            {
+                this.X = i;
+                this.Y = 1;
+                this.Draw();
+                Thread.Sleep(201 - this.Speed);
+                this.Draw(false);
+            }
+        }
+    }
+}
